@@ -37,7 +37,7 @@ I enjoy turning complicated things into clear, useful experiences — one small 
   <summary><b>A few small things about me</b></summary>
   <br />
 
-  - Competitive programming is my way of practicing precision under pressure.
+  - Algorithmic problem solving is my way of practicing precision under pressure.
   - I care about the last 10%: wording, interaction, edge cases, and whether something feels right.
   - A good tool should feel less like a machine and more like a well-drawn map.
 </details>
@@ -45,10 +45,6 @@ I enjoy turning complicated things into clear, useful experiences — one small 
 <br />
 
 <p align="center">
-  <a href="https://codeforces.com/profile/iron_lotus">
-    <img src="https://img.shields.io/badge/Codeforces-iron__lotus-171B2C?style=for-the-badge&logo=codeforces&logoColor=8EA6FF" alt="Codeforces: iron_lotus" />
-  </a>
-  &nbsp;
   <a href="https://github.com/Binah-Dev?tab=followers">
     <img src="https://img.shields.io/badge/GitHub-let's_connect-171B2C?style=for-the-badge&logo=github&logoColor=E7E9F4" alt="Connect on GitHub" />
   </a>
@@ -58,4 +54,3 @@ I enjoy turning complicated things into clear, useful experiences — one small 
   <br />
   <i>To step into the infinite journey, and cross the infinite worlds.</i>
 </p>
-
