@@ -35,6 +35,7 @@ function renderNixieSymbols() {
   return NIXIE_DIGITS
     .map((pathData, digit) => `
       <symbol id="tube-digit-${digit}" viewBox="0 0 70 92">
+        <path d="${pathData}" class="nixie-halo" />
         <path d="${pathData}" class="nixie-wire" />
       </symbol>`)
     .join('');
@@ -47,11 +48,22 @@ function renderDigitStack(digit, index, digitWidth) {
   const digitX = tubeX + 5;
   const stackStep = 106;
   const begin = `${(index * 0.09).toFixed(2)}s`;
-  const duration = (1.42 + index * 0.035).toFixed(2);
-  const sequence = [start, (start + 3) % 10, (start + 7) % 10, finalDigit];
+  const duration = (2.18 + index * 0.055).toFixed(2);
+  const sequence = [
+    start,
+    (start + 6) % 10,
+    (start + 3) % 10,
+    (start + 8) % 10,
+    (start + 2) % 10,
+    (start + 7) % 10,
+    (start + 4) % 10,
+    finalDigit
+  ];
   const animationOffsets = sequence
     .map((_, sequenceIndex) => `0 ${-sequenceIndex * stackStep}`)
     .join(';');
+  const keyTimes = '0;.11;.23;.38;.54;.68;.84;1';
+  const keySplines = '.35 .02 .7 1;.18 .85 .3 1;.28 .02 .55 1;.15 .9 .25 1;.28 .02 .6 1;.2 .85 .25 1;.12 .94 .22 1';
   const cathodes = sequence
     .map((value, sequenceIndex) =>
       `<use href="#tube-digit-${value}" x="${digitX}" y="${14 + sequenceIndex * stackStep}" width="70" height="108" />`)
@@ -62,7 +74,7 @@ function renderDigitStack(digit, index, digitWidth) {
       <g opacity=".62">
         ${cathodes}
         <animate attributeName="opacity" values=".58;1;.76;1" keyTimes="0;.24;.58;1" dur="2.8s" begin="${begin}" repeatCount="indefinite" />
-        <animateTransform attributeName="transform" type="translate" values="${animationOffsets}" keyTimes="0;0.35;0.72;1" dur="${duration}s" begin="${begin}" calcMode="spline" keySplines=".2 .8 .2 1;.2 .8 .2 1;.2 .8 .2 1" fill="freeze" />
+        <animateTransform attributeName="transform" type="translate" values="${animationOffsets}" keyTimes="${keyTimes}" dur="${duration}s" begin="${begin}" calcMode="spline" keySplines="${keySplines}" fill="freeze" />
       </g>
     </g>`;
 }
@@ -88,6 +100,9 @@ function renderTube(index, digitWidth) {
       <animate attributeName="opacity" values=".22;.55;.28;.46;.22" dur="3.1s" begin="${delay}" repeatCount="indefinite" />
     </rect>
     <path d="${ghostDigit}" transform="translate(${tubeX + 5} 14) scale(1 1.17)" fill="none" stroke="#8d3d24" stroke-opacity=".2" stroke-width="1.25" />
+    <path d="M${tubeX + 20} 28 C${tubeX + 34} 36 ${tubeX + 46} 36 ${tubeX + 61} 28" fill="none" stroke="#ffd58c" stroke-opacity=".28" stroke-width="1" stroke-dasharray="2 7">
+      <animate attributeName="stroke-dashoffset" values="0;-18;0" dur="2.6s" begin="${delay}" repeatCount="indefinite" />
+    </path>
     <path d="M${tubeX + 22} 35 V129 M${tubeX + 58} 35 V129" stroke="#f2a45a" stroke-opacity=".28" stroke-width="1.1" />
     <path d="M${tubeX + 21} 40 H${tubeX + 59} M${tubeX + 20} 123 H${tubeX + 60}" stroke="#ffbd69" stroke-opacity=".28" stroke-width="1" />
     <ellipse cx="${centerX}" cy="12" rx="10" ry="4" fill="url(#metal)" stroke="#ffd28a" stroke-opacity=".5" />
@@ -99,11 +114,22 @@ function renderTube(index, digitWidth) {
     <rect x="${tubeX + 4}" y="128" width="${tubeWidth - 8}" height="31" rx="7" fill="url(#metal)" stroke="#a9522d" stroke-width="1.3" />
     <rect x="${tubeX + 7}" y="133" width="${tubeWidth - 14}" height="7" rx="3" fill="#2c100a" opacity=".72" />
     <path d="M${tubeX + 12} 145 H${tubeX + tubeWidth - 12}" stroke="#f2ad65" stroke-opacity=".55" />
+    <rect x="${tubeX + 13}" y="145" width="${tubeWidth - 26}" height="2" rx="1" fill="#ff8a3c" opacity=".26">
+      <animate attributeName="opacity" values=".2;.9;.3;.65;.2" dur="2.2s" begin="${delay}" repeatCount="indefinite" />
+    </rect>
     <circle cx="${tubeX + 16}" cy="149" r="1.8" fill="#ff9b48" filter="url(#ember-glow)">
       <animate attributeName="opacity" values=".18;1;.25" dur="1.9s" begin="${delay}" repeatCount="indefinite" />
     </circle>
     <circle cx="${tubeX + tubeWidth - 16}" cy="149" r="1.8" fill="#ff9b48" filter="url(#ember-glow)">
       <animate attributeName="opacity" values="1;.2;1" dur="2.3s" begin="${delay}" repeatCount="indefinite" />
+    </circle>
+    <circle cx="${tubeX + 25}" cy="61" r="1.2" fill="#ffe0a3" filter="url(#ember-glow)">
+      <animate attributeName="cy" values="61;96;61" dur="2.7s" begin="${delay}" repeatCount="indefinite" />
+      <animate attributeName="opacity" values="0;.95;0" dur="2.7s" begin="${delay}" repeatCount="indefinite" />
+    </circle>
+    <circle cx="${tubeX + 56}" cy="106" r="1" fill="#ffb557" filter="url(#ember-glow)">
+      <animate attributeName="cy" values="106;52;106" dur="3.4s" begin="${delay}" repeatCount="indefinite" />
+      <animate attributeName="opacity" values="0;.7;0" dur="3.4s" begin="${delay}" repeatCount="indefinite" />
     </circle>
     <path d="M${tubeX + 18} 159 V177 M${tubeX + 31} 159 V177 M${tubeX + 49} 159 V177 M${tubeX + 62} 159 V177" stroke="#d58a50" stroke-width="2.6" stroke-linecap="round" />
     <path d="M${tubeX + 17} 177 H${tubeX + 20} M${tubeX + 30} 177 H${tubeX + 33} M${tubeX + 48} 177 H${tubeX + 51} M${tubeX + 61} 177 H${tubeX + 64}" stroke="#ffd08a" stroke-opacity=".7" stroke-width="1.3" />
@@ -172,6 +198,7 @@ function renderCounter(count) {
     </linearGradient>
     <pattern id="mesh" width="12" height="10" patternUnits="userSpaceOnUse">
       <path d="M0 5 L3 0 H9 L12 5 L9 10 H3 Z M-6 5 L-3 0 H3 L6 5 L3 10 H-3 Z" fill="none" stroke="#ef8b42" stroke-opacity=".38" stroke-width=".75" />
+      <animateTransform attributeName="patternTransform" type="translate" values="0 0;6 5;0 0" dur="5.6s" repeatCount="indefinite" />
     </pattern>
     <pattern id="scanlines" width="4" height="4" patternUnits="userSpaceOnUse">
       <path d="M0 0 H4" stroke="#ff9b38" stroke-opacity=".11" stroke-width="1" />
@@ -197,6 +224,7 @@ function renderCounter(count) {
       <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
     </filter>
     <style>
+      .nixie-halo { fill: none; stroke: #ff7c31; stroke-width: 7.5; stroke-linecap: round; stroke-linejoin: round; opacity: .34; filter: url(#digit-glow); }
       .nixie-wire { fill: none; stroke: #ffc26d; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; filter: url(#digit-glow); }
     </style>
   </defs>
