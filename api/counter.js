@@ -49,7 +49,7 @@ function renderDigitStack(digit, index, digitWidth) {
   const digitX = tubeX + 5;
   const stackStep = 106;
   const begin = `${(index * 0.09).toFixed(2)}s`;
-  const duration = (2.18 + index * 0.055).toFixed(2);
+  const duration = (0.38 + index * 0.012).toFixed(2);
   const sequence = [
     start,
     (start + 6) % 10,
@@ -88,7 +88,12 @@ function renderTube(index, digitWidth) {
   const right = tubeX + tubeWidth - 7;
   const body = `M${left} 133 V50 C${left} 26 ${tubeX + 19} 12 ${centerX} 12 C${tubeX + 61} 12 ${right} 26 ${right} 50 V133 Z`;
   const delay = `${(index * 0.11).toFixed(2)}s`;
-  const ghostDigit = NIXIE_DIGITS[8];
+  const inactiveCathodes = NIXIE_DIGITS
+    .map((pathData, digit) => {
+      const opacity = digit === 8 ? '.08' : '.032';
+      return `<path d="${pathData}" transform="translate(${tubeX + 5} 14) scale(1 1.17)" fill="none" stroke="#c36f3f" stroke-opacity="${opacity}" stroke-width=".9" />`;
+    })
+    .join('');
 
   return `
   <g class="nixie-tube" aria-hidden="true">
@@ -101,7 +106,7 @@ function renderTube(index, digitWidth) {
     <rect x="${left + 4}" y="29" width="${tubeWidth - 22}" height="101" rx="23" fill="url(#mesh)" opacity=".34" clip-path="url(#tube-slot-${index})">
       <animate attributeName="opacity" values=".22;.55;.28;.46;.22" dur="3.1s" begin="${delay}" repeatCount="indefinite" />
     </rect>
-    <path d="${ghostDigit}" transform="translate(${tubeX + 5} 14) scale(1 1.17)" fill="none" stroke="#8d3d24" stroke-opacity=".2" stroke-width="1.25" />
+    ${inactiveCathodes}
     <ellipse cx="${centerX}" cy="83" rx="24" ry="45" fill="none" stroke="#c47a43" stroke-opacity=".2" stroke-width="1" />
     <path d="M${tubeX + 27} 35 C${tubeX + 18} 61 ${tubeX + 22} 104 ${tubeX + 32} 127 M${tubeX + 53} 35 C${tubeX + 63} 62 ${tubeX + 59} 104 ${tubeX + 49} 127" fill="none" stroke="#d9874b" stroke-opacity=".22" stroke-width="1.2" />
     <path d="M${tubeX + 20} 28 C${tubeX + 34} 36 ${tubeX + 46} 36 ${tubeX + 61} 28" fill="none" stroke="#ffd58c" stroke-opacity=".28" stroke-width="1" stroke-dasharray="2 7">
