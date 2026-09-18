@@ -164,15 +164,6 @@ function renderActiveDigit(digit, index) {
     </g>`;
 }
 
-function renderScrews() {
-  return [[31, 64, 25], [809, 64, -18], [31, 257, -32], [809, 257, 38]]
-    .map(([x, y, angle]) => `
-      <g transform="translate(${x} ${y}) rotate(${angle})">
-        <circle r="4.1" fill="url(#screw-metal)" stroke="#090909" stroke-width="1" />
-        <path d="M-2.3 0 H2.3" stroke="#25211e" stroke-width=".9" />
-      </g>`).join('');
-}
-
 function renderCounter(count) {
   const rawValue = String(Math.max(0, count));
   const value = rawValue.length > DISPLAY_DIGITS
@@ -187,18 +178,6 @@ function renderCounter(count) {
   <defs>
     ${renderClipPaths()}
     ${renderNixieSymbols()}
-    <linearGradient id="backdrop" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#110c08" /><stop offset=".5" stop-color="#090604" /><stop offset="1" stop-color="#040302" />
-    </linearGradient>
-    <radialGradient id="ambient" cx="50%" cy="42%" r="72%">
-      <stop offset="0" stop-color="#2b170b" stop-opacity=".56" /><stop offset=".48" stop-color="#160b05" stop-opacity=".2" /><stop offset="1" stop-color="#020100" stop-opacity=".8" />
-    </radialGradient>
-    <linearGradient id="frame-metal" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#764522" /><stop offset=".08" stop-color="#301a0e" /><stop offset=".56" stop-color="#0b0704" /><stop offset=".92" stop-color="#351a0c" /><stop offset="1" stop-color="#955329" />
-    </linearGradient>
-    <linearGradient id="recess" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#050302" /><stop offset=".2" stop-color="#160b05" /><stop offset=".77" stop-color="#070402" /><stop offset="1" stop-color="#201005" />
-    </linearGradient>
     <linearGradient id="glass-body" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#ffd6ad" stop-opacity=".11" /><stop offset=".12" stop-color="#c96f39" stop-opacity=".05" /><stop offset=".46" stop-color="#050201" stop-opacity=".13" /><stop offset=".84" stop-color="#a3471f" stop-opacity=".035" /><stop offset="1" stop-color="#e78849" stop-opacity=".09" />
     </linearGradient>
@@ -223,14 +202,9 @@ function renderCounter(count) {
       <stop offset="0" stop-color="#a65d30" /><stop offset=".08" stop-color="#4a2513" /><stop offset=".38" stop-color="#1a0e08" /><stop offset=".7" stop-color="#3b1b0d" /><stop offset="1" stop-color="#0d0704" />
     </linearGradient>
     <linearGradient id="pin-metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8e4a27" /><stop offset=".65" stop-color="#29140b" /><stop offset="1" stop-color="#b25d31" /></linearGradient>
-    <radialGradient id="screw-metal" cx="35%" cy="28%" r="70%"><stop offset="0" stop-color="#c47d4e" /><stop offset=".35" stop-color="#69381f" /><stop offset="1" stop-color="#1b0d07" /></radialGradient>
     <pattern id="anode-mesh" width="10" height="8.6" patternUnits="userSpaceOnUse">
       <path d="M0 4.3 L2.5 0 H7.5 L10 4.3 L7.5 8.6 H2.5 Z M-5 4.3 L-2.5 0 H2.5 L5 4.3 L2.5 8.6 H-2.5 Z" fill="none" stroke="#b86234" stroke-opacity=".48" stroke-width=".6" />
     </pattern>
-    <pattern id="brushed-lines" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M0 .5 H5 M0 3.5 H5" stroke="#cf7541" stroke-opacity=".06" stroke-width=".45" /></pattern>
-    <filter id="material-grain" x="-10%" y="-10%" width="120%" height="120%">
-      <feTurbulence type="fractalNoise" baseFrequency=".48" numOctaves="3" seed="29" result="noise" /><feColorMatrix in="noise" type="saturate" values="0" /><feComponentTransfer><feFuncA type="table" tableValues="0 .11" /></feComponentTransfer>
-    </filter>
     <filter id="glass-soft-reflection" x="-80%" y="-30%" width="260%" height="160%" color-interpolation-filters="sRGB">
       <feGaussianBlur stdDeviation="2.15" />
     </filter>
@@ -269,21 +243,6 @@ function renderCounter(count) {
       .filament-glint { fill: none; stroke: #fff2b7; stroke-width: .3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: .8 2.2; opacity: .9; }
     </style>
   </defs>
-  <rect y="50" width="${CANVAS_WIDTH}" height="${CANVAS_HEIGHT}" rx="10" fill="url(#backdrop)" />
-  <rect y="50" width="${CANVAS_WIDTH}" height="${CANVAS_HEIGHT}" rx="10" fill="url(#ambient)" />
-  <rect x="1" y="51" width="838" height="228" rx="9" fill="none" stroke="#8f4725" stroke-opacity=".34" />
-  <rect x="19" y="53" width="802" height="220" rx="5" fill="#030201" stroke="#080402" stroke-width="5" />
-  <rect x="22" y="56" width="796" height="214" rx="3" fill="url(#frame-metal)" stroke="#aa5b31" stroke-opacity=".58" />
-  <rect x="30" y="65" width="780" height="192" rx="2" fill="url(#recess)" stroke="#110804" stroke-width="3" />
-  <rect x="34" y="69" width="772" height="184" rx="1" fill="#0b0502" stroke="#a8522b" stroke-opacity=".32" />
-  <rect x="34" y="69" width="772" height="184" fill="url(#brushed-lines)" opacity=".58" />
-  <rect x="34" y="69" width="772" height="184" fill="#c45f31" opacity=".07" filter="url(#material-grain)" />
-  <path d="M38 73 H802 M38 249 H802" stroke="#d57b49" stroke-opacity=".2" />
-  ${renderScrews()}
-  ${Array.from({ length: DISPLAY_DIGITS }, (_, index) => {
-    const x = TUBE_START_X + index * TUBE_PITCH;
-    return `<rect x="${x - 4}" y="75" width="82" height="170" rx="30" fill="#020100" fill-opacity=".46" stroke="#a9542b" stroke-opacity=".16" />`;
-  }).join('')}
   <g>${tubes}</g>
   <g>${digits}</g>
   <g>${glassOverlays}</g>
