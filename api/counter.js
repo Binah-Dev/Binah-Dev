@@ -46,6 +46,8 @@ function renderDigitStack(digit, index, digitWidth) {
   const tubeX = 14 + index * digitWidth;
   const digitX = tubeX + 5;
   const stackStep = 106;
+  const begin = `${(index * 0.09).toFixed(2)}s`;
+  const duration = (1.42 + index * 0.035).toFixed(2);
   const sequence = [start, (start + 3) % 10, (start + 7) % 10, finalDigit];
   const animationOffsets = sequence
     .map((_, sequenceIndex) => `0 ${-sequenceIndex * stackStep}`)
@@ -57,9 +59,10 @@ function renderDigitStack(digit, index, digitWidth) {
 
   return `
     <g clip-path="url(#tube-slot-${index})">
-      <g>
+      <g opacity=".62">
         ${cathodes}
-        <animateTransform attributeName="transform" type="translate" values="${animationOffsets}" keyTimes="0;0.35;0.72;1" dur="1.65s" calcMode="spline" keySplines=".2 .8 .2 1;.2 .8 .2 1;.2 .8 .2 1" fill="freeze" />
+        <animate attributeName="opacity" values=".58;1;.76;1" keyTimes="0;.24;.58;1" dur="2.8s" begin="${begin}" repeatCount="indefinite" />
+        <animateTransform attributeName="transform" type="translate" values="${animationOffsets}" keyTimes="0;0.35;0.72;1" dur="${duration}s" begin="${begin}" calcMode="spline" keySplines=".2 .8 .2 1;.2 .8 .2 1;.2 .8 .2 1" fill="freeze" />
       </g>
     </g>`;
 }
@@ -71,21 +74,37 @@ function renderTube(index, digitWidth) {
   const left = tubeX + 7;
   const right = tubeX + tubeWidth - 7;
   const body = `M${left} 133 V50 C${left} 26 ${tubeX + 19} 12 ${centerX} 12 C${tubeX + 61} 12 ${right} 26 ${right} 50 V133 Z`;
+  const delay = `${(index * 0.11).toFixed(2)}s`;
+  const ghostDigit = NIXIE_DIGITS[8];
 
   return `
   <g class="nixie-tube" aria-hidden="true">
     <path d="${body}" fill="#ff5b22" fill-opacity=".16" stroke="#ff6e2b" stroke-opacity=".48" stroke-width="7" filter="url(#tube-aura)" />
     <path d="${body}" fill="url(#tube-glass)" stroke="url(#glass-rim)" stroke-width="1.5" />
-    <rect x="${left + 4}" y="29" width="${tubeWidth - 22}" height="101" rx="23" fill="url(#mesh)" opacity=".5" clip-path="url(#tube-slot-${index})" />
+    <ellipse cx="${centerX}" cy="82" rx="28" ry="51" fill="#ff6c2c" opacity=".06" filter="url(#tube-aura)">
+      <animate attributeName="opacity" values=".04;.18;.06;.12;.04" dur="3.8s" begin="${delay}" repeatCount="indefinite" />
+    </ellipse>
+    <rect x="${left + 4}" y="29" width="${tubeWidth - 22}" height="101" rx="23" fill="url(#mesh)" opacity=".34" clip-path="url(#tube-slot-${index})">
+      <animate attributeName="opacity" values=".22;.55;.28;.46;.22" dur="3.1s" begin="${delay}" repeatCount="indefinite" />
+    </rect>
+    <path d="${ghostDigit}" transform="translate(${tubeX + 5} 14) scale(1 1.17)" fill="none" stroke="#8d3d24" stroke-opacity=".2" stroke-width="1.25" />
     <path d="M${tubeX + 22} 35 V129 M${tubeX + 58} 35 V129" stroke="#f2a45a" stroke-opacity=".28" stroke-width="1.1" />
     <path d="M${tubeX + 21} 40 H${tubeX + 59} M${tubeX + 20} 123 H${tubeX + 60}" stroke="#ffbd69" stroke-opacity=".28" stroke-width="1" />
     <ellipse cx="${centerX}" cy="12" rx="10" ry="4" fill="url(#metal)" stroke="#ffd28a" stroke-opacity=".5" />
     <path d="M${centerX - 6} 10 V6 C${centerX - 6} 1 ${centerX + 6} 1 ${centerX + 6} 6 V10" fill="url(#glass-top)" stroke="#ffb668" stroke-opacity=".66" stroke-width="1" />
-    <path d="M${tubeX + 17} 26 C${tubeX + 11} 51 ${tubeX + 12} 100 ${tubeX + 23} 126" fill="none" stroke="#fff0c5" stroke-opacity=".34" stroke-width="2.2" />
+    <path d="M${tubeX + 17} 26 C${tubeX + 11} 51 ${tubeX + 12} 100 ${tubeX + 23} 126" fill="none" stroke="#fff0c5" stroke-opacity=".2" stroke-width="2.2">
+      <animate attributeName="stroke-opacity" values=".14;.6;.2" dur="4.6s" begin="${delay}" repeatCount="indefinite" />
+    </path>
     <path d="M${tubeX + 66} 29 C${tubeX + 72} 51 ${tubeX + 70} 98 ${tubeX + 63} 122" fill="none" stroke="#ffb65a" stroke-opacity=".12" stroke-width="1.4" />
     <rect x="${tubeX + 4}" y="128" width="${tubeWidth - 8}" height="31" rx="7" fill="url(#metal)" stroke="#a9522d" stroke-width="1.3" />
     <rect x="${tubeX + 7}" y="133" width="${tubeWidth - 14}" height="7" rx="3" fill="#2c100a" opacity=".72" />
     <path d="M${tubeX + 12} 145 H${tubeX + tubeWidth - 12}" stroke="#f2ad65" stroke-opacity=".55" />
+    <circle cx="${tubeX + 16}" cy="149" r="1.8" fill="#ff9b48" filter="url(#ember-glow)">
+      <animate attributeName="opacity" values=".18;1;.25" dur="1.9s" begin="${delay}" repeatCount="indefinite" />
+    </circle>
+    <circle cx="${tubeX + tubeWidth - 16}" cy="149" r="1.8" fill="#ff9b48" filter="url(#ember-glow)">
+      <animate attributeName="opacity" values="1;.2;1" dur="2.3s" begin="${delay}" repeatCount="indefinite" />
+    </circle>
     <path d="M${tubeX + 18} 159 V177 M${tubeX + 31} 159 V177 M${tubeX + 49} 159 V177 M${tubeX + 62} 159 V177" stroke="#d58a50" stroke-width="2.6" stroke-linecap="round" />
     <path d="M${tubeX + 17} 177 H${tubeX + 20} M${tubeX + 30} 177 H${tubeX + 33} M${tubeX + 48} 177 H${tubeX + 51} M${tubeX + 61} 177 H${tubeX + 64}" stroke="#ffd08a" stroke-opacity=".7" stroke-width="1.3" />
   </g>`;
@@ -157,6 +176,12 @@ function renderCounter(count) {
     <pattern id="scanlines" width="4" height="4" patternUnits="userSpaceOnUse">
       <path d="M0 0 H4" stroke="#ff9b38" stroke-opacity=".11" stroke-width="1" />
     </pattern>
+    <linearGradient id="sweep" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ff9f4b" stop-opacity="0" />
+      <stop offset=".48" stop-color="#ffd38a" stop-opacity=".72" />
+      <stop offset=".52" stop-color="#ff7b35" stop-opacity=".86" />
+      <stop offset="1" stop-color="#ff742e" stop-opacity="0" />
+    </linearGradient>
     <filter id="tube-aura" x="-65%" y="-35%" width="230%" height="180%">
       <feGaussianBlur stdDeviation="5.6" result="blur" />
       <feColorMatrix in="blur" type="matrix" values="1 0 0 0 .45 0 0 0 0 .08 0 0 0 0 0 0 0 0 .82 0" />
@@ -179,6 +204,10 @@ function renderCounter(count) {
   <rect x="5" y="5" width="${width - 10}" height="${height - 10}" rx="12" fill="url(#panel)" stroke="#bf5c2b" stroke-opacity=".78" stroke-width="1.3" />
   <path d="M11 26 H${width - 11} M11 183 H${width - 11}" stroke="#c35727" stroke-opacity=".45" />
   <rect x="7" y="7" width="${width - 14}" height="${height - 14}" rx="10" fill="url(#scanlines)" />
+  <path d="M-26 8 V182" stroke="url(#sweep)" stroke-width="7" opacity=".24" filter="url(#tube-aura)">
+    <animateTransform attributeName="transform" type="translate" values="0 0;${width + 52} 0;0 0" dur="8.5s" repeatCount="indefinite" />
+  </path>
+  <path d="M12 21 H${width - 12} M12 176 H${width - 12}" stroke="#ffd08a" stroke-opacity=".08" stroke-dasharray="2 9" />
   <ellipse cx="${width / 2}" cy="78" rx="${Math.max(30, width / 2 - 10)}" ry="70" fill="none" stroke="#ff5728" stroke-opacity=".2" stroke-width="1" filter="url(#tube-aura)" />
   <g>${tubes}</g>
   <g>${digits}</g>
