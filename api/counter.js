@@ -74,10 +74,7 @@ function renderTube(index) {
   const center = x + TUBE_WIDTH / 2;
   const left = x + 7;
   const right = x + TUBE_WIDTH - 7;
-  const variation = (index % 4) - 1.5;
-  const reflectionX = left + 8 + variation;
   const body = `M${left} 205 V106 C${left} 82 ${x + 18} 66 ${center} 66 C${x + 56} 66 ${right} 82 ${right} 106 V205 Z`;
-  const delay = `${(index * 0.055).toFixed(3)}s`;
 
   return `
     <g class="tube" aria-hidden="true">
@@ -103,12 +100,6 @@ function renderTube(index) {
       </g>
       <path d="${body}" fill="url(#glass-body)" stroke="#db915d" stroke-opacity=".2" stroke-width="1.1" />
       <path d="${body}" fill="url(#glass-depth)" opacity=".74" />
-      <path d="M${reflectionX} 192 V108 C${reflectionX} 88 ${x + 23 + variation} 76 ${center - 6} 72" fill="none" stroke="#ffc187" stroke-opacity=".24" stroke-width="1.8" stroke-linecap="round">
-        <animate attributeName="stroke-opacity" values=".19;.28;.2" dur="7.4s" begin="${delay}" repeatCount="indefinite" />
-      </path>
-      <path d="M${right - 7} 194 V110 C${right - 7} 90 ${right - 13} 78 ${center + 9} 73" fill="none" stroke="#c86d38" stroke-opacity=".1" stroke-width="1.1" />
-      <path d="M${center - 16} 73 C${center - 6} 67 ${center + 7} 67 ${center + 16} 74" fill="none" stroke="#ffd19f" stroke-opacity=".21" stroke-width="1.4" stroke-linecap="round" />
-      <path d="M${left + 2} 198 Q${center} 207 ${right - 2} 198" fill="none" stroke="#c87545" stroke-opacity=".22" stroke-width="2.3" />
       <path d="M${center - 5} 68 V61 C${center - 5} 56 ${center + 5} 56 ${center + 5} 61 V68" fill="url(#glass-tip)" stroke="#eaa46e" stroke-opacity=".24" stroke-width=".9" />
       <ellipse cx="${center}" cy="68" rx="8" ry="3" fill="#ed9e5d" fill-opacity=".09" />
       <rect x="${x + 12}" y="198" width="50" height="10" rx="3" fill="#130a06" stroke="#914925" stroke-opacity=".55" />
@@ -120,6 +111,44 @@ function renderTube(index) {
         <path d="M${x + 16} 238 V256" /><path d="M${x + 29} 238 V258" />
         <path d="M${x + 45} 238 V258" /><path d="M${x + 58} 238 V256" />
       </g>
+    </g>`;
+}
+
+function renderGlassOverlay(index) {
+  const x = TUBE_START_X + index * TUBE_PITCH;
+  const center = x + TUBE_WIDTH / 2;
+  const left = x + 7;
+  const right = x + TUBE_WIDTH - 7;
+  const variation = (index % 4) - 1.5;
+  const reflectionX = left + 8 + variation;
+  const delay = `${(index * 0.055).toFixed(3)}s`;
+  const body = `M${left} 205 V106 C${left} 82 ${x + 18} 66 ${center} 66 C${x + 56} 66 ${right} 82 ${right} 106 V205 Z`;
+  const innerBody = `M${left + 3} 200 V108 C${left + 3} 87 ${x + 21} 71 ${center} 71 C${x + 53} 71 ${right - 3} 87 ${right - 3} 108 V200`;
+
+  return `
+    <g class="glass-foreground" aria-hidden="true">
+      <path d="${body}" fill="url(#front-glass-film)" opacity=".56" />
+      <path d="${body}" fill="url(#glass-caustic)" opacity=".46" />
+      <path d="${innerBody}" fill="none" stroke="#f2bf91" stroke-opacity=".12" stroke-width=".8" />
+
+      <path d="M${reflectionX} 193 V109 C${reflectionX} 89 ${x + 23 + variation} 77 ${center - 7} 72" fill="none" stroke="#ffe7d0" stroke-opacity=".19" stroke-width="5.2" stroke-linecap="round" filter="url(#glass-soft-reflection)">
+        <animate attributeName="stroke-opacity" values=".16;.22;.17" dur="8.2s" begin="${delay}" repeatCount="indefinite" />
+      </path>
+      <path d="M${reflectionX - 1.1} 190 V110 C${reflectionX - 1.1} 90 ${x + 22 + variation} 79 ${center - 8} 73" fill="none" stroke="#fff7ed" stroke-opacity=".47" stroke-width=".72" stroke-linecap="round">
+        <animate attributeName="stroke-opacity" values=".4;.52;.42" dur="8.2s" begin="${delay}" repeatCount="indefinite" />
+      </path>
+      <path d="M${right - 7} 194 V111 C${right - 7} 91 ${right - 13} 79 ${center + 10} 73" fill="none" stroke="#edaa77" stroke-opacity=".18" stroke-width="1.15" />
+
+      <path d="M${center - 17} 73 C${center - 8} 65 ${center + 9} 65 ${center + 18} 74" fill="none" stroke="#fff3e4" stroke-opacity=".4" stroke-width="2.6" stroke-linecap="round" filter="url(#glass-soft-reflection)" />
+      <path d="M${center - 14} 72 C${center - 5} 68 ${center + 6} 68 ${center + 14} 73" fill="none" stroke="#fffaf3" stroke-opacity=".48" stroke-width=".65" stroke-linecap="round" />
+      <path d="M${x + 20} 83 C${x + 29} 77 ${x + 38} 77 ${x + 45} 80" fill="none" stroke="#ffe6cf" stroke-opacity=".14" stroke-width="3.4" stroke-linecap="round" filter="url(#glass-soft-reflection)" />
+      <ellipse cx="${center - 13}" cy="77" rx="3.4" ry="1.25" fill="#fff8ee" fill-opacity=".2" filter="url(#glass-soft-reflection)" />
+
+      <path d="M${left + 2} 198 Q${center} 208 ${right - 2} 198" fill="none" stroke="#d98c59" stroke-opacity=".36" stroke-width="3.2" />
+      <path d="M${left + 5} 199 Q${center} 204 ${right - 5} 199" fill="none" stroke="#ffe0c1" stroke-opacity=".28" stroke-width=".75" />
+      <ellipse cx="${center}" cy="202" rx="27" ry="4.3" fill="url(#glass-lip)" opacity=".44" />
+
+      <path d="M${left + 1} 205 V106 C${left + 1} 80 ${x + 18} 64 ${center} 64 C${x + 57} 64 ${right - 1} 80 ${right - 1} 106 V205" fill="none" stroke="#f1bb8d" stroke-opacity=".21" stroke-width="1.05" />
     </g>`;
 }
 
@@ -151,6 +180,7 @@ function renderCounter(count) {
     : rawValue.padStart(DISPLAY_DIGITS, '0');
   const tubes = Array.from({ length: DISPLAY_DIGITS }, (_, index) => renderTube(index)).join('');
   const digits = value.split('').map(renderActiveDigit).join('');
+  const glassOverlays = Array.from({ length: DISPLAY_DIGITS }, (_, index) => renderGlassOverlay(index)).join('');
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${CANVAS_WIDTH}" height="${CANVAS_HEIGHT}" viewBox="0 50 ${CANVAS_WIDTH} ${CANVAS_HEIGHT}" role="img" aria-label="Animated profile views counter: ${escapeXml(rawValue)}">
@@ -178,6 +208,15 @@ function renderCounter(count) {
     <linearGradient id="glass-tip" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#ffe0b5" stop-opacity=".19" /><stop offset=".5" stop-color="#88401f" stop-opacity=".07" /><stop offset="1" stop-color="#140905" stop-opacity=".5" />
     </linearGradient>
+    <linearGradient id="front-glass-film" x1="0" y1="0" x2="1" y2=".18">
+      <stop offset="0" stop-color="#fff2df" stop-opacity=".14" /><stop offset=".07" stop-color="#f0b886" stop-opacity=".035" /><stop offset=".18" stop-color="#fff9ef" stop-opacity=".1" /><stop offset=".27" stop-color="#ffffff" stop-opacity="0" /><stop offset=".7" stop-color="#ff9b50" stop-opacity=".012" /><stop offset=".91" stop-color="#d77943" stop-opacity=".04" /><stop offset="1" stop-color="#fff0dc" stop-opacity=".12" />
+    </linearGradient>
+    <radialGradient id="glass-caustic" cx="28%" cy="18%" r="86%">
+      <stop offset="0" stop-color="#fff8ed" stop-opacity=".12" /><stop offset=".19" stop-color="#f7c79f" stop-opacity=".035" /><stop offset=".52" stop-color="#ffffff" stop-opacity="0" /><stop offset=".88" stop-color="#ff8439" stop-opacity=".025" /><stop offset="1" stop-color="#5a1e08" stop-opacity=".08" />
+    </radialGradient>
+    <linearGradient id="glass-lip" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff2df" stop-opacity=".34" /><stop offset=".42" stop-color="#c66d3b" stop-opacity=".12" /><stop offset="1" stop-color="#160905" stop-opacity=".42" />
+    </linearGradient>
     <radialGradient id="ion-cloud"><stop offset="0" stop-color="#ffb21a" stop-opacity=".58" /><stop offset=".32" stop-color="#ff6800" stop-opacity=".26" /><stop offset=".7" stop-color="#ff3c00" stop-opacity=".07" /><stop offset="1" stop-color="#ff2600" stop-opacity="0" /></radialGradient>
     <radialGradient id="light-spill"><stop offset="0" stop-color="#ff9a0a" stop-opacity=".56" /><stop offset=".42" stop-color="#ff5800" stop-opacity=".18" /><stop offset="1" stop-color="#ff3000" stop-opacity="0" /></radialGradient>
     <linearGradient id="socket-metal" x1="0" y1="0" x2="0" y2="1">
@@ -191,6 +230,9 @@ function renderCounter(count) {
     <pattern id="brushed-lines" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M0 .5 H5 M0 3.5 H5" stroke="#cf7541" stroke-opacity=".06" stroke-width=".45" /></pattern>
     <filter id="material-grain" x="-10%" y="-10%" width="120%" height="120%">
       <feTurbulence type="fractalNoise" baseFrequency=".48" numOctaves="3" seed="29" result="noise" /><feColorMatrix in="noise" type="saturate" values="0" /><feComponentTransfer><feFuncA type="table" tableValues="0 .11" /></feComponentTransfer>
+    </filter>
+    <filter id="glass-soft-reflection" x="-80%" y="-30%" width="260%" height="160%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="2.15" />
     </filter>
     <filter id="cathode-wide-glow" x="-150%" y="-135%" width="400%" height="370%" color-interpolation-filters="sRGB">
       <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="wide-blur" />
@@ -244,6 +286,7 @@ function renderCounter(count) {
   }).join('')}
   <g>${tubes}</g>
   <g>${digits}</g>
+  <g>${glassOverlays}</g>
 </svg>`;
 }
 
