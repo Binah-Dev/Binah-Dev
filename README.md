@@ -6,6 +6,10 @@
   <samp>somewhere between algorithms, quiet curiosity, and the next unexplored idea</samp>
 </p>
 
+<p align="center">
+  <img src="https://binah-profile-counter.vercel.app/api/counter" alt="Animated profile views" />
+</p>
+
 <br />
 
 ## Hello, I'm Binah <sub>你好呀 👋</sub>
