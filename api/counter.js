@@ -3,7 +3,7 @@ const COUNTER_SOURCE =
 
 const DISPLAY_DIGITS = 8;
 const CANVAS_WIDTH = 840;
-const CANVAS_HEIGHT = 310;
+const CANVAS_HEIGHT = 230;
 const TUBE_START_X = 52;
 const TUBE_PITCH = 92;
 const TUBE_WIDTH = 74;
@@ -114,9 +114,7 @@ function renderTube(index) {
       <rect x="${x + 12}" y="198" width="50" height="10" rx="3" fill="#130a06" stroke="#914925" stroke-opacity=".55" />
       <path d="M${x + 5} 205 H${x + 69} V229 C${x + 69} 235 ${x + 63} 238 ${x + 57} 238 H${x + 17} C${x + 11} 238 ${x + 5} 235 ${x + 5} 229 Z" fill="url(#socket-metal)" stroke="#9f552e" stroke-opacity=".86" stroke-width="1" />
       <path d="M${x + 8} 209 H${x + 66} M${x + 8} 232 H${x + 66}" stroke="#d07943" stroke-opacity=".4" stroke-width=".8" />
-      <rect x="${x + 10}" y="213" width="54" height="13" rx="1.5" fill="#100804" opacity=".84" />
-      <path d="M${x + 13} 216 H${x + 61}" stroke="#a5572e" stroke-opacity=".43" />
-      <text x="${center}" y="223" text-anchor="middle" class="socket-mark">IN-14</text>
+      <path d="M${x + 13} 216 H${x + 61} M${x + 15} 222 H${x + 59}" stroke="#a5572e" stroke-opacity=".32" stroke-width=".75" />
       <path d="M${x + 14} 229 H${x + 60}" stroke="#3b1d11" stroke-width="2" stroke-dasharray="2 2" />
       <g stroke="url(#pin-metal)" stroke-width="2.25" stroke-linecap="round">
         <path d="M${x + 16} 238 V256" /><path d="M${x + 29} 238 V258" />
@@ -155,7 +153,7 @@ function renderCounter(count) {
   const digits = value.split('').map(renderActiveDigit).join('');
 
   return `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="${CANVAS_WIDTH}" height="${CANVAS_HEIGHT}" viewBox="0 0 ${CANVAS_WIDTH} ${CANVAS_HEIGHT}" role="img" aria-label="Animated profile views counter: ${escapeXml(rawValue)}">
+<svg xmlns="http://www.w3.org/2000/svg" width="${CANVAS_WIDTH}" height="${CANVAS_HEIGHT}" viewBox="0 50 ${CANVAS_WIDTH} ${CANVAS_HEIGHT}" role="img" aria-label="Animated profile views counter: ${escapeXml(rawValue)}">
   <defs>
     ${renderClipPaths()}
     ${renderNixieSymbols()}
@@ -227,23 +225,11 @@ function renderCounter(count) {
       .filament-hot-edge { fill: none; stroke: #ffd064; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; filter: url(#cathode-core-light); }
       .filament-spine { fill: none; stroke: #7a2d0b; stroke-width: .48; stroke-linecap: round; stroke-linejoin: round; opacity: .68; }
       .filament-glint { fill: none; stroke: #fff2b7; stroke-width: .3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: .8 2.2; opacity: .9; }
-      .socket-mark { fill: #dc8b51; fill-opacity: .7; font: 600 5px Georgia, serif; letter-spacing: 1.2px; }
-      .brand { fill: #efb77e; fill-opacity: .96; font: 600 10px Georgia, 'Times New Roman', serif; letter-spacing: 2.2px; }
-      .instrument { fill: #c87949; fill-opacity: .62; font: 500 6.5px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: 1.45px; }
-      .worldline { fill: #d78b57; fill-opacity: .54; font: 500 6px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: 1.7px; }
-      .caption { fill: #e19a63; fill-opacity: .72; font: 500 7px Georgia, 'Times New Roman', serif; letter-spacing: 2px; }
     </style>
   </defs>
-  <rect width="${CANVAS_WIDTH}" height="${CANVAS_HEIGHT}" rx="10" fill="url(#backdrop)" />
-  <rect width="${CANVAS_WIDTH}" height="${CANVAS_HEIGHT}" rx="10" fill="url(#ambient)" />
-  <rect x="1" y="1" width="838" height="308" rx="9" fill="none" stroke="#8f4725" stroke-opacity=".34" />
-  <text x="28" y="30" class="brand">STEINS;GATE COUNTER LAB</text>
-  <text x="28" y="43" class="instrument">COLD CATHODE DISPLAY  /  TYPE IN-14  /  170V</text>
-  <g text-anchor="end">
-    <text x="812" y="28" class="worldline">STEINS;GATE WORLDLINE</text>
-    <text x="812" y="42" class="instrument">0.000081  /  OBSERVATION ACTIVE</text>
-  </g>
-  <path d="M28 51 H812" stroke="#c96d3a" stroke-opacity=".23" />
+  <rect y="50" width="${CANVAS_WIDTH}" height="${CANVAS_HEIGHT}" rx="10" fill="url(#backdrop)" />
+  <rect y="50" width="${CANVAS_WIDTH}" height="${CANVAS_HEIGHT}" rx="10" fill="url(#ambient)" />
+  <rect x="1" y="51" width="838" height="228" rx="9" fill="none" stroke="#8f4725" stroke-opacity=".34" />
   <rect x="19" y="53" width="802" height="220" rx="5" fill="#030201" stroke="#080402" stroke-width="5" />
   <rect x="22" y="56" width="796" height="214" rx="3" fill="url(#frame-metal)" stroke="#aa5b31" stroke-opacity=".58" />
   <rect x="30" y="65" width="780" height="192" rx="2" fill="url(#recess)" stroke="#110804" stroke-width="3" />
@@ -258,8 +244,6 @@ function renderCounter(count) {
   }).join('')}
   <g>${tubes}</g>
   <g>${digits}</g>
-  <text x="32" y="294" class="caption">ANALOG GLOW IN A DIGITAL WORLD.</text>
-  <text x="808" y="294" text-anchor="end" class="instrument">PROFILE OBSERVATIONS  /  ${escapeXml(rawValue.padStart(DISPLAY_DIGITS, '0'))}</text>
 </svg>`;
 }
 
