@@ -42,17 +42,18 @@ function escapeXml(value) {
 function renderDigitStack(digit, index, digitWidth) {
   const finalDigit = Number(digit);
   const start = (finalDigit + 10) % 10;
-  const centerX = 31 + index * digitWidth;
-  const imageX = centerX - 25;
-  const imageSize = 50;
+  const centerX = 18 + index * digitWidth + digitWidth / 2;
+  const imageX = centerX - 29;
+  const imageSize = 58;
+  const stackStep = 60;
   const sequence = [start, (start + 3) % 10, (start + 7) % 10, finalDigit];
   const dataImages = sequence
     .map((value, sequenceIndex) => {
       const image = DIGITS[value];
       if (!image) {
-        return `<text x="${centerX}" y="${57 + sequenceIndex * 52}" text-anchor="middle">${value}</text>`;
+        return `<text x="${centerX}" y="${72 + sequenceIndex * stackStep}" text-anchor="middle">${value}</text>`;
       }
-      return `<use href="#art-digit-${value}" x="${imageX}" y="${23 + sequenceIndex * 52}" width="${imageSize}" height="${imageSize}" />`;
+      return `<use href="#art-digit-${value}" x="${imageX}" y="${37 + sequenceIndex * stackStep}" width="${imageSize}" height="${imageSize}" />`;
     })
     .join('');
 
@@ -60,7 +61,7 @@ function renderDigitStack(digit, index, digitWidth) {
     <g clip-path="url(#digit-${index})">
       <g>
         ${dataImages}
-        <animateTransform attributeName="transform" type="translate" values="0 ${-start * 52};0 ${-((start + 3) % 10) * 52};0 ${-((start + 7) % 10) * 52};0 ${-finalDigit * 52}" keyTimes="0;0.38;0.7;1" dur="1.45s" calcMode="spline" keySplines=".2 .8 .2 1;.2 .8 .2 1;.2 .8 .2 1" fill="freeze" />
+        <animateTransform attributeName="transform" type="translate" values="0 ${-start * stackStep};0 ${-((start + 3) % 10) * stackStep};0 ${-((start + 7) % 10) * stackStep};0 ${-finalDigit * stackStep}" keyTimes="0;0.38;0.7;1" dur="1.45s" calcMode="spline" keySplines=".2 .8 .2 1;.2 .8 .2 1;.2 .8 .2 1" fill="freeze" />
       </g>
     </g>`;
 }
@@ -68,13 +69,13 @@ function renderDigitStack(digit, index, digitWidth) {
 function renderCounter(count) {
   const rawValue = String(Math.max(0, count));
   const value = rawValue.length > 8 ? rawValue.slice(-8) : rawValue.padStart(8, '0');
-  const digitWidth = 52;
-  const width = 54 + value.length * digitWidth;
+  const digitWidth = 60;
+  const width = 36 + value.length * digitWidth;
   const clips = value
     .split('')
     .map((_, index) => {
-      const centerX = 31 + index * digitWidth;
-      return `<clipPath id="digit-${index}"><rect x="${centerX - 27}" y="21" width="54" height="57" rx="8" /></clipPath>`;
+      const centerX = 18 + index * digitWidth + digitWidth / 2;
+      return `<clipPath id="digit-${index}"><rect x="${centerX - 30}" y="34" width="60" height="65" rx="10" /></clipPath>`;
     })
     .join('');
   const digits = value
@@ -88,7 +89,7 @@ function renderCounter(count) {
     .join('');
 
   return `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="112" viewBox="0 0 ${width} 112" role="img" aria-label="Animated profile views counter: ${escapeXml(rawValue)}">
+<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="132" viewBox="0 0 ${width} 132" role="img" aria-label="Animated profile views counter: ${escapeXml(rawValue)}">
   <defs>
     ${clips}
     ${artwork}
@@ -115,21 +116,17 @@ function renderCounter(count) {
       <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
     </filter>
     <style>
-      .micro { font: 600 6px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: 1px; fill: #f28b2b; }
-      .label { font: 700 7px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: 1.5px; fill: #ffb13b; }
       .fallback { font: 800 40px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #ff9a2e; filter: url(#ember-glow); }
     </style>
   </defs>
-  <rect x="1.5" y="1.5" width="${width - 3}" height="109" rx="10" fill="#050303" stroke="#42100a" stroke-width="3" />
-  <rect x="4" y="4" width="${width - 8}" height="104" rx="8" fill="url(#glass)" stroke="url(#frame)" stroke-width="1.2" />
-  <ellipse cx="${width / 2}" cy="55" rx="${Math.max(30, width / 2 - 8)}" ry="47" fill="none" stroke="#ff5c20" stroke-opacity=".22" stroke-width="1" filter="url(#soft-glow)" />
-  <rect x="5" y="5" width="${width - 10}" height="102" rx="7" fill="url(#scanlines)" opacity=".75" />
-  <path d="M7 20H${width - 7}" stroke="#e34216" stroke-opacity=".62" />
-  <circle cx="12" cy="12" r="2.4" fill="#ff5421" filter="url(#ember-glow)">
+  <rect x="1.5" y="1.5" width="${width - 3}" height="129" rx="12" fill="#050303" stroke="#42100a" stroke-width="3" />
+  <rect x="4" y="4" width="${width - 8}" height="124" rx="10" fill="url(#glass)" stroke="url(#frame)" stroke-width="1.2" />
+  <ellipse cx="${width / 2}" cy="66" rx="${Math.max(30, width / 2 - 8)}" ry="57" fill="none" stroke="#ff5c20" stroke-opacity=".22" stroke-width="1" filter="url(#soft-glow)" />
+  <rect x="5" y="5" width="${width - 10}" height="122" rx="9" fill="url(#scanlines)" opacity=".75" />
+  <path d="M8 26H${width - 8}" stroke="#e34216" stroke-opacity=".62" />
+  <circle cx="15" cy="16" r="3" fill="#ff5421" filter="url(#ember-glow)">
     <animate attributeName="opacity" values="1;.22;1" dur="1.1s" repeatCount="indefinite" />
   </circle>
-  <text class="micro" x="18" y="14">STEINS;GATE</text>
-  <text class="label" x="8" y="101">PROFILE VIEWS</text>
   <g class="fallback">${digits}</g>
 </svg>`;
 }

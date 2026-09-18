@@ -6,10 +6,6 @@
   <samp>somewhere between algorithms, quiet curiosity, and the next unexplored idea</samp>
 </p>
 
-<p align="center">
-  <img src="https://binah-profile-counter.vercel.app/api/counter?v=steins-gate-8digit" alt="Animated profile views" />
-</p>
-
 <br />
 
 ## Hello, I'm Binah <sub>你好呀 👋</sub>
@@ -57,4 +53,8 @@ I enjoy turning complicated things into clear, useful experiences — one small 
 <p align="center">
   <br />
   <i>To step into the infinite journey, and cross the infinite worlds.</i>
+</p>
+
+<p align="center">
+  <img src="https://binah-profile-counter.vercel.app/api/counter?v=steins-gate-8digit" alt="Animated profile views" />
 </p>
