@@ -47,6 +47,9 @@ function renderDigitStack(digit, index, digitWidth) {
   const imageSize = 58;
   const stackStep = 60;
   const sequence = [start, (start + 3) % 10, (start + 7) % 10, finalDigit];
+  const animationOffsets = sequence
+    .map((_, sequenceIndex) => `0 ${-sequenceIndex * stackStep}`)
+    .join(';');
   const dataImages = sequence
     .map((value, sequenceIndex) => {
       const image = DIGITS[value];
@@ -61,7 +64,7 @@ function renderDigitStack(digit, index, digitWidth) {
     <g clip-path="url(#digit-${index})">
       <g>
         ${dataImages}
-        <animateTransform attributeName="transform" type="translate" values="0 ${-start * stackStep};0 ${-((start + 3) % 10) * stackStep};0 ${-((start + 7) % 10) * stackStep};0 ${-finalDigit * stackStep}" keyTimes="0;0.38;0.7;1" dur="1.45s" calcMode="spline" keySplines=".2 .8 .2 1;.2 .8 .2 1;.2 .8 .2 1" fill="freeze" />
+        <animateTransform attributeName="transform" type="translate" values="${animationOffsets}" keyTimes="0;0.38;0.7;1" dur="1.45s" calcMode="spline" keySplines=".2 .8 .2 1;.2 .8 .2 1;.2 .8 .2 1" fill="freeze" />
       </g>
     </g>`;
 }
