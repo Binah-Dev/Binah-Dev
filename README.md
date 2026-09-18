@@ -6,6 +6,12 @@
   <samp>somewhere between algorithms, quiet curiosity, and the next unexplored idea</samp>
 </p>
 
+<p align="center">
+  <a href="https://github.com/Binah-Dev">
+    <img src="https://komarev.com/ghpvc/?username=Binah-Dev&amp;label=Profile%20views&amp;color=8EA6FF&amp;style=flat-square" alt="GitHub profile views" />
+  </a>
+</p>
+
 <br />
 
 ## Hello, I'm Binah <sub>你好呀 👋</sub>
