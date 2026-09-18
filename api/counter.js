@@ -23,6 +23,72 @@ function escapeXml(value) {
     .replace(/'/g, '&apos;');
 }
 
+function getBeijingDisplayValues(now = new Date()) {
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Asia/Shanghai',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hourCycle: 'h23'
+    })
+      .formatToParts(now)
+      .filter((part) => part.type !== 'literal')
+      .map((part) => [part.type, part.value])
+  );
+
+  return {
+    dateValue: `${parts.year}${parts.month}${parts.day}`,
+    timeValue: ` ${parts.hour}${parts.minute}${parts.second} `
+  };
+}
+
+function hashSeed(value) {
+  let hash = 2166136261;
+  for (const character of value) {
+    hash ^= character.charCodeAt(0);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+}
+
+function nextRandom(state) {
+  let value = state >>> 0;
+  value ^= value << 13;
+  value ^= value >>> 17;
+  value ^= value << 5;
+  return value >>> 0;
+}
+
+const RANDOM_FRAME_STARTS = [
+  0, 0.055, 0.12, 0.195, 0.285, 0.395, 0.53,
+  0.695, 0.895, 1.14, 1.44, 1.8, 2.22
+];
+const DATE_STAGE_START = 2.72;
+const DATE_STAGE_DURATION = 1.33;
+const TIME_STAGE_START = 4.18;
+const TIME_STAGE_DURATION = 1.64;
+const COUNT_STAGE_START = 5.98;
+
+function buildRandomFrames(seed) {
+  let state = seed || 0x9e3779b9;
+  let previous = Array(DISPLAY_DIGITS).fill(-1);
+
+  return RANDOM_FRAME_STARTS.map(() => {
+    const digits = previous.map((prior, index) => {
+      state = nextRandom(state + index + 1);
+      let digit = state % 10;
+      if (digit === prior) digit = (digit + 1 + index) % 10;
+      return digit;
+    });
+    previous = digits;
+    return digits.join('');
+  });
+}
+
 // Purpose-drawn cathodes: narrow, imperfect bends instead of a display font.
 const NIXIE_DIGITS = [
   'M35 10 C21 10 15 22 15 46 C15 70 21 82 35 82 C49 82 55 70 55 46 C55 22 49 10 35 10 Z',
@@ -152,16 +218,61 @@ function renderGlassOverlay(index) {
     </g>`;
 }
 
-function renderActiveDigit(digit, index) {
+function renderDigitUse(digit, index) {
+  if (!/[0-9]/.test(digit)) return '';
   const x = TUBE_START_X + index * TUBE_PITCH + 2;
-  const delay = `${(0.04 + index * 0.045).toFixed(3)}s`;
-  const duration = `${(0.22 + (index % 3) * 0.018).toFixed(3)}s`;
+  return `<use href="#cathode-${Number(digit)}" x="${x}" y="99" width="70" height="99" />`;
+}
+
+function renderTransientDigit(digit, index, start, duration, stage, unstable = false) {
+  const use = renderDigitUse(digit, index);
+  if (!use) return '';
+  const jitter = unstable ? ((index * 7 + Math.round(start * 1000)) % 5) * 0.003 : index * 0.004;
+  const begin = (start + jitter).toFixed(3);
+  const opacityValues = unstable ? '0;.38;1;.44;.88;0' : '0;.42;1;.7;1;1;0';
+  const keyTimes = unstable ? '0;.09;.25;.43;.7;1' : '0;.07;.18;.28;.42;.86;1';
+
   return `
-    <g clip-path="url(#tube-clip-${index})" opacity="1">
-      <use href="#cathode-${Number(digit)}" x="${x}" y="99" width="70" height="99" />
-      <animate attributeName="opacity" values="0;.24;.88;.58;1" keyTimes="0;.14;.45;.68;1" dur="${duration}" begin="${delay}" fill="freeze" />
-      <animate attributeName="opacity" values="1;.97;1;.985;1" dur="6.8s" begin="${1.1 + index * 0.13}s" repeatCount="indefinite" />
+    <g clip-path="url(#tube-clip-${index})" opacity="0" data-stage="${stage}">
+      ${use}
+      <animate attributeName="opacity" values="${opacityValues}" keyTimes="${keyTimes}" dur="${duration.toFixed(3)}s" begin="${begin}s" fill="remove" />
     </g>`;
+}
+
+function renderStartupSequence(randomFrames, dateValue, timeValue, countValue) {
+  const randomDigits = randomFrames.map((frameValue, frameIndex) => {
+    const start = RANDOM_FRAME_STARTS[frameIndex];
+    const end = frameIndex + 1 < RANDOM_FRAME_STARTS.length
+      ? RANDOM_FRAME_STARTS[frameIndex + 1]
+      : DATE_STAGE_START;
+    const duration = end - start + 0.025;
+    return frameValue
+      .split('')
+      .map((digit, index) => renderTransientDigit(digit, index, start, duration, `unstable-${frameIndex}`, true))
+      .join('');
+  }).join('');
+
+  const dateDigits = dateValue
+    .split('')
+    .map((digit, index) => renderTransientDigit(digit, index, DATE_STAGE_START, DATE_STAGE_DURATION, 'date'))
+    .join('');
+  const timeDigits = timeValue
+    .split('')
+    .map((digit, index) => renderTransientDigit(digit, index, TIME_STAGE_START, TIME_STAGE_DURATION, 'beijing-time'))
+    .join('');
+  const countDigits = countValue
+    .split('')
+    .map((digit, index) => {
+      const begin = (COUNT_STAGE_START + index * 0.025).toFixed(3);
+      return `
+        <g clip-path="url(#tube-clip-${index})" opacity="0" data-stage="visits">
+          ${renderDigitUse(digit, index)}
+          <animate attributeName="opacity" values="0;.28;1;.62;1" keyTimes="0;.12;.38;.6;1" dur=".62s" begin="${begin}s" fill="freeze" />
+        </g>`;
+    })
+    .join('');
+
+  return `${randomDigits}${dateDigits}${timeDigits}${countDigits}`;
 }
 
 function renderCounter(count) {
@@ -169,8 +280,10 @@ function renderCounter(count) {
   const value = rawValue.length > DISPLAY_DIGITS
     ? rawValue.slice(-DISPLAY_DIGITS)
     : rawValue.padStart(DISPLAY_DIGITS, '0');
+  const { dateValue, timeValue } = getBeijingDisplayValues();
+  const randomFrames = buildRandomFrames(hashSeed(`${rawValue}:${dateValue}:${timeValue}`));
   const tubes = Array.from({ length: DISPLAY_DIGITS }, (_, index) => renderTube(index)).join('');
-  const digits = value.split('').map(renderActiveDigit).join('');
+  const digits = renderStartupSequence(randomFrames, dateValue, timeValue, value);
   const glassOverlays = Array.from({ length: DISPLAY_DIGITS }, (_, index) => renderGlassOverlay(index)).join('');
 
   return `<?xml version="1.0" encoding="UTF-8"?>
