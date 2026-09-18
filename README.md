@@ -1,4 +1,4 @@
-<p align="center">
+<img width="611" height="149" alt="image" src="https://github.com/user-attachments/assets/c8630b08-d075-42cb-937c-aa77d5ddec8e" /><p align="center">
   <img src="./assets/header.svg" width="100%" alt="Binah — wandering through algorithms, ideas, and infinite worlds" />
 </p>
 
@@ -52,7 +52,7 @@ I enjoy turning complicated things into clear, useful experiences — one small 
 
 <p align="center">
   <br />
-  <i>To step into the infinite journey, and cross the infinite worlds.</i>
+  <i>It’s the choice of Steins Gate.”.</i>
 </p>
 
 <p align="center">
