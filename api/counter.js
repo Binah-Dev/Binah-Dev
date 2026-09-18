@@ -77,7 +77,7 @@ function renderTube(index) {
 
   return `
     <g class="tube" aria-hidden="true">
-      <ellipse cx="${center}" cy="221" rx="32" ry="11" fill="url(#light-spill)" opacity=".18" />
+      <ellipse cx="${center}" cy="221" rx="34" ry="12" fill="url(#light-spill)" opacity=".38" />
       <g clip-path="url(#tube-clip-${index})">
         <rect x="${left + 3}" y="84" width="${right - left - 6}" height="121" rx="25" fill="#070402" opacity=".9" />
         <rect x="${left + 5}" y="89" width="${right - left - 10}" height="111" rx="23" fill="url(#anode-mesh)" opacity=".36" />
@@ -95,7 +95,7 @@ function renderTube(index) {
           <rect x="${x + 52}" y="168" width="4" height="7" rx="1" />
         </g>
         ${renderInactiveCathodes(index)}
-        <ellipse cx="${center}" cy="148" rx="27" ry="50" fill="url(#ion-cloud)" opacity=".31" />
+        <ellipse cx="${center}" cy="148" rx="29" ry="53" fill="url(#ion-cloud)" opacity=".78" />
       </g>
       <path d="${body}" fill="url(#glass-body)" stroke="#db915d" stroke-opacity=".2" stroke-width="1.1" />
       <path d="${body}" fill="url(#glass-depth)" opacity=".74" />
@@ -176,8 +176,8 @@ function renderCounter(count) {
     <linearGradient id="glass-tip" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#ffe0b5" stop-opacity=".19" /><stop offset=".5" stop-color="#88401f" stop-opacity=".07" /><stop offset="1" stop-color="#140905" stop-opacity=".5" />
     </linearGradient>
-    <radialGradient id="ion-cloud"><stop offset="0" stop-color="#ff8a00" stop-opacity=".31" /><stop offset=".36" stop-color="#ff4d00" stop-opacity=".12" /><stop offset="1" stop-color="#ff3200" stop-opacity="0" /></radialGradient>
-    <radialGradient id="light-spill"><stop offset="0" stop-color="#ff7000" stop-opacity=".34" /><stop offset="1" stop-color="#ff3d00" stop-opacity="0" /></radialGradient>
+    <radialGradient id="ion-cloud"><stop offset="0" stop-color="#ffb21a" stop-opacity=".58" /><stop offset=".32" stop-color="#ff6800" stop-opacity=".26" /><stop offset=".7" stop-color="#ff3c00" stop-opacity=".07" /><stop offset="1" stop-color="#ff2600" stop-opacity="0" /></radialGradient>
+    <radialGradient id="light-spill"><stop offset="0" stop-color="#ff9a0a" stop-opacity=".56" /><stop offset=".42" stop-color="#ff5800" stop-opacity=".18" /><stop offset="1" stop-color="#ff3000" stop-opacity="0" /></radialGradient>
     <linearGradient id="socket-metal" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#a65d30" /><stop offset=".08" stop-color="#4a2513" /><stop offset=".38" stop-color="#1a0e08" /><stop offset=".7" stop-color="#3b1b0d" /><stop offset="1" stop-color="#0d0704" />
     </linearGradient>
@@ -190,19 +190,35 @@ function renderCounter(count) {
     <filter id="material-grain" x="-10%" y="-10%" width="120%" height="120%">
       <feTurbulence type="fractalNoise" baseFrequency=".48" numOctaves="3" seed="29" result="noise" /><feColorMatrix in="noise" type="saturate" values="0" /><feComponentTransfer><feFuncA type="table" tableValues="0 .11" /></feComponentTransfer>
     </filter>
-    <filter id="cathode-near-glow" x="-80%" y="-60%" width="260%" height="220%">
-      <feGaussianBlur stdDeviation="2.6" result="blur" /><feColorMatrix in="blur" type="matrix" values="1 0 0 0 .86 0 0 0 0 .28 0 0 0 0 .015 0 0 0 1 0" />
+    <filter id="cathode-wide-glow" x="-150%" y="-135%" width="400%" height="370%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="wide-blur" />
+      <feFlood flood-color="#ff3800" flood-opacity=".95" result="wide-color" />
+      <feComposite in="wide-color" in2="wide-blur" operator="in" result="wide-light" />
+      <feMerge><feMergeNode in="wide-light" /><feMergeNode in="wide-blur" /></feMerge>
     </filter>
-    <filter id="cathode-wide-glow" x="-120%" y="-110%" width="340%" height="320%"><feGaussianBlur stdDeviation="6.6" /></filter>
-    <filter id="cathode-core-light" x="-45%" y="-35%" width="190%" height="170%">
-      <feGaussianBlur in="SourceGraphic" stdDeviation=".7" result="soft-core" />
-      <feMerge><feMergeNode in="soft-core" /><feMergeNode in="SourceGraphic" /></feMerge>
+    <filter id="cathode-near-glow" x="-100%" y="-80%" width="300%" height="260%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3.8" result="near-blur" />
+      <feFlood flood-color="#ff6500" flood-opacity="1" result="near-color" />
+      <feComposite in="near-color" in2="near-blur" operator="in" result="near-light" />
+      <feMerge><feMergeNode in="near-light" /><feMergeNode in="SourceGraphic" /></feMerge>
+    </filter>
+    <filter id="cathode-wire-light" x="-60%" y="-45%" width="220%" height="190%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="1.45" result="wire-blur" />
+      <feFlood flood-color="#ffa014" flood-opacity="1" result="wire-color" />
+      <feComposite in="wire-color" in2="wire-blur" operator="in" result="wire-light" />
+      <feMerge><feMergeNode in="wire-light" /><feMergeNode in="SourceGraphic" /></feMerge>
+    </filter>
+    <filter id="cathode-core-light" x="-55%" y="-45%" width="210%" height="190%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceGraphic" stdDeviation=".9" result="soft-core" />
+      <feFlood flood-color="#fff7c7" flood-opacity="1" result="core-color" />
+      <feComposite in="core-color" in2="soft-core" operator="in" result="core-light" />
+      <feMerge><feMergeNode in="core-light" /><feMergeNode in="SourceGraphic" /></feMerge>
     </filter>
     <style>
-      .cathode-atmosphere { fill: none; stroke: #ff3d00; stroke-width: 13; stroke-linecap: round; stroke-linejoin: round; opacity: .3; filter: url(#cathode-wide-glow); }
-      .cathode-bloom { fill: none; stroke: #ff5a00; stroke-width: 6.2; stroke-linecap: round; stroke-linejoin: round; opacity: .82; filter: url(#cathode-near-glow); }
-      .cathode-wire { fill: none; stroke: #ff8a00; stroke-width: 3.35; stroke-linecap: round; stroke-linejoin: round; }
-      .cathode-core { fill: none; stroke: #fff0a8; stroke-width: 1.28; stroke-linecap: round; stroke-linejoin: round; opacity: 1; filter: url(#cathode-core-light); }
+      .cathode-atmosphere { fill: none; stroke: #ff3000; stroke-width: 18; stroke-linecap: round; stroke-linejoin: round; opacity: .48; filter: url(#cathode-wide-glow); }
+      .cathode-bloom { fill: none; stroke: #ff5a00; stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; opacity: .94; filter: url(#cathode-near-glow); }
+      .cathode-wire { fill: none; stroke: #ff8b00; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; filter: url(#cathode-wire-light); }
+      .cathode-core { fill: none; stroke: #fff6c2; stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round; opacity: 1; filter: url(#cathode-core-light); }
       .socket-mark { fill: #dc8b51; fill-opacity: .7; font: 600 5px Georgia, serif; letter-spacing: 1.2px; }
       .brand { fill: #efb77e; fill-opacity: .96; font: 600 10px Georgia, 'Times New Roman', serif; letter-spacing: 2.2px; }
       .instrument { fill: #c87949; fill-opacity: .62; font: 500 6.5px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: 1.45px; }
