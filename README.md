@@ -51,5 +51,10 @@ I enjoy turning complicated things into clear, useful experiences — one small 
 </p>
 
 <p align="center">
+  <br />
+  <i>It’s the choice of Steins Gate.</i>
+</p>
+
+<p align="center">
   <img src="https://binah-profile-counter.vercel.app/api/counter?v=steins-gate-tubes-only-v11" width="100%" alt="Animated Nixie tube profile views counter" />
 </p>
