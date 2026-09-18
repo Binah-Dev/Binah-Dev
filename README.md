@@ -1,5 +1,5 @@
 <img width="611" height="149" alt="image" src="https://github.com/user-attachments/assets/c8630b08-d075-42cb-937c-aa77d5ddec8e" /><p align="center">
-  <img src="./assets/header.svg" width="100%" alt="Binah — wandering through algorithms, ideas, and infinite worlds" />
+  <img src="https://raw.githubusercontent.com/Binah-Dev/Binah-Dev/main/assets/header.svg" width="100%" alt="Binah — wandering through algorithms, ideas, and infinite worlds" />
 </p>
 
 <p align="center">
@@ -56,5 +56,5 @@ I enjoy turning complicated things into clear, useful experiences — one small 
 </p>
 
 <p align="center">
-  <img src="https://binah-profile-counter.vercel.app/api/counter?v=steins-gate-8digit-fix" alt="Animated profile views" />
+  <img src="https://binah-profile-counter.vercel.app/api/counter?v=steins-gate-nixie-v1" alt="Animated profile views" />
 </p>
