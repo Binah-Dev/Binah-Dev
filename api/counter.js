@@ -105,7 +105,7 @@ const NIXIE_DIGITS = [
 
 function renderNixieSymbols() {
   return NIXIE_DIGITS.map((pathData, digit) => `
-    <symbol id="cathode-${digit}" viewBox="0 0 70 92">
+    <symbol id="cathode-${digit}" viewBox="0 0 70 92" overflow="visible">
       <path d="${pathData}" class="cathode-atmosphere" />
       <path d="${pathData}" class="cathode-bloom" />
       <path d="${pathData}" class="filament-shadow" transform="translate(.8 1.05)" />
@@ -162,7 +162,7 @@ function renderTube(index) {
           <rect x="${x + 52}" y="168" width="4" height="7" rx="1" />
         </g>
         ${renderInactiveCathodes(index)}
-        <ellipse cx="${center}" cy="148" rx="29" ry="53" fill="url(#ion-cloud)" opacity=".78" />
+        <ellipse cx="${center}" cy="148" rx="29" ry="53" fill="url(#ion-cloud)" opacity=".2" />
       </g>
       <path d="${body}" fill="url(#glass-body)" stroke="#db915d" stroke-opacity=".2" stroke-width="1.1" />
       <path d="${body}" fill="url(#glass-depth)" opacity=".74" />
@@ -221,7 +221,9 @@ function renderGlassOverlay(index) {
 function renderDigitUse(digit, index) {
   if (!/[0-9]/.test(digit)) return '';
   const x = TUBE_START_X + index * TUBE_PITCH + 2;
-  return `<use href="#cathode-${Number(digit)}" x="${x}" y="99" width="70" height="99" />`;
+  return `
+    <ellipse cx="${x + 35}" cy="148" rx="32" ry="55" fill="url(#active-ion-aura)" opacity=".76" />
+    <use href="#cathode-${Number(digit)}" x="${x}" y="99" width="70" height="99" overflow="visible" />`;
 }
 
 function renderTransientDigit(digit, index, start, duration, stage, unstable = false) {
@@ -233,7 +235,7 @@ function renderTransientDigit(digit, index, start, duration, stage, unstable = f
   const keyTimes = unstable ? '0;.09;.25;.43;.7;1' : '0;.07;.18;.28;.42;.86;1';
 
   return `
-    <g clip-path="url(#tube-clip-${index})" opacity="0" data-stage="${stage}">
+    <g opacity="0" data-stage="${stage}">
       ${use}
       <animate attributeName="opacity" values="${opacityValues}" keyTimes="${keyTimes}" dur="${duration.toFixed(3)}s" begin="${begin}s" fill="remove" />
     </g>`;
@@ -265,7 +267,7 @@ function renderStartupSequence(randomFrames, dateValue, timeValue, countValue) {
     .map((digit, index) => {
       const begin = (COUNT_STAGE_START + index * 0.025).toFixed(3);
       return `
-        <g clip-path="url(#tube-clip-${index})" opacity="0" data-stage="visits">
+        <g opacity="0" data-stage="visits">
           ${renderDigitUse(digit, index)}
           <animate attributeName="opacity" values="0;.28;1;.62;1" keyTimes="0;.12;.38;.6;1" dur=".62s" begin="${begin}s" fill="freeze" />
         </g>`;
@@ -310,6 +312,9 @@ function renderCounter(count) {
       <stop offset="0" stop-color="#fff2df" stop-opacity=".34" /><stop offset=".42" stop-color="#c66d3b" stop-opacity=".12" /><stop offset="1" stop-color="#160905" stop-opacity=".42" />
     </linearGradient>
     <radialGradient id="ion-cloud"><stop offset="0" stop-color="#ffb21a" stop-opacity=".58" /><stop offset=".32" stop-color="#ff6800" stop-opacity=".26" /><stop offset=".7" stop-color="#ff3c00" stop-opacity=".07" /><stop offset="1" stop-color="#ff2600" stop-opacity="0" /></radialGradient>
+    <radialGradient id="active-ion-aura">
+      <stop offset="0" stop-color="#ffc12d" stop-opacity=".62" /><stop offset=".23" stop-color="#ff8200" stop-opacity=".38" /><stop offset=".55" stop-color="#ff4a00" stop-opacity=".18" /><stop offset=".8" stop-color="#ff2600" stop-opacity=".06" /><stop offset="1" stop-color="#ff1d00" stop-opacity="0" />
+    </radialGradient>
     <radialGradient id="light-spill"><stop offset="0" stop-color="#ff9a0a" stop-opacity=".56" /><stop offset=".42" stop-color="#ff5800" stop-opacity=".18" /><stop offset="1" stop-color="#ff3000" stop-opacity="0" /></radialGradient>
     <linearGradient id="socket-metal" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#a65d30" /><stop offset=".08" stop-color="#4a2513" /><stop offset=".38" stop-color="#1a0e08" /><stop offset=".7" stop-color="#3b1b0d" /><stop offset="1" stop-color="#0d0704" />
@@ -322,13 +327,13 @@ function renderCounter(count) {
       <feGaussianBlur stdDeviation="2.15" />
     </filter>
     <filter id="cathode-wide-glow" x="-150%" y="-135%" width="400%" height="370%" color-interpolation-filters="sRGB">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="wide-blur" />
+      <feGaussianBlur in="SourceGraphic" stdDeviation="11.5" result="wide-blur" />
       <feFlood flood-color="#ff3800" flood-opacity=".95" result="wide-color" />
       <feComposite in="wide-color" in2="wide-blur" operator="in" result="wide-light" />
       <feMerge><feMergeNode in="wide-light" /><feMergeNode in="wide-blur" /></feMerge>
     </filter>
     <filter id="cathode-near-glow" x="-100%" y="-80%" width="300%" height="260%" color-interpolation-filters="sRGB">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="3.8" result="near-blur" />
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4.8" result="near-blur" />
       <feFlood flood-color="#ff6500" flood-opacity="1" result="near-color" />
       <feComposite in="near-color" in2="near-blur" operator="in" result="near-light" />
       <feMerge><feMergeNode in="near-light" /><feMergeNode in="SourceGraphic" /></feMerge>
@@ -346,11 +351,11 @@ function renderCounter(count) {
       <feMerge><feMergeNode in="core-light" /><feMergeNode in="SourceGraphic" /></feMerge>
     </filter>
     <style>
-      .cathode-atmosphere { fill: none; stroke: #ff3000; stroke-width: 17; stroke-linecap: round; stroke-linejoin: round; opacity: .43; filter: url(#cathode-wide-glow); }
-      .cathode-bloom { fill: none; stroke: #ff5700; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; opacity: .86; filter: url(#cathode-near-glow); }
+      .cathode-atmosphere { fill: none; stroke: #ff2800; stroke-width: 20; stroke-linecap: round; stroke-linejoin: round; opacity: .62; filter: url(#cathode-wide-glow); }
+      .cathode-bloom { fill: none; stroke: #ff5300; stroke-width: 10; stroke-linecap: round; stroke-linejoin: round; opacity: .98; filter: url(#cathode-near-glow); }
       .filament-shadow { fill: none; stroke: #080301; stroke-width: 5.4; stroke-linecap: round; stroke-linejoin: round; opacity: .9; }
       .filament-body { fill: none; stroke: #6f2b0d; stroke-width: 4.7; stroke-linecap: round; stroke-linejoin: round; opacity: .98; }
-      .ion-sheath { fill: none; stroke: #ff7600; stroke-width: 3.65; stroke-linecap: round; stroke-linejoin: round; filter: url(#cathode-wire-light); }
+      .ion-sheath { fill: none; stroke: #ff7800; stroke-width: 3.9; stroke-linecap: round; stroke-linejoin: round; filter: url(#cathode-wire-light); }
       .filament-hot-edge { fill: none; stroke: #ffd064; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; filter: url(#cathode-core-light); }
       .filament-spine { fill: none; stroke: #7a2d0b; stroke-width: .48; stroke-linecap: round; stroke-linejoin: round; opacity: .68; }
       .filament-glint { fill: none; stroke: #fff2b7; stroke-width: .3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: .8 2.2; opacity: .9; }
