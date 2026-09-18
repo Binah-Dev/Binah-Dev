@@ -37,6 +37,7 @@ function renderNixieSymbols() {
       <symbol id="tube-digit-${digit}" viewBox="0 0 70 92">
         <path d="${pathData}" class="nixie-halo" />
         <path d="${pathData}" class="nixie-wire" />
+        <path d="${pathData}" class="nixie-core" />
       </symbol>`)
     .join('');
 }
@@ -93,6 +94,7 @@ function renderTube(index, digitWidth) {
   <g class="nixie-tube" aria-hidden="true">
     <path d="${body}" fill="#ff5b22" fill-opacity=".16" stroke="#ff6e2b" stroke-opacity=".48" stroke-width="7" filter="url(#tube-aura)" />
     <path d="${body}" fill="url(#tube-glass)" stroke="url(#glass-rim)" stroke-width="1.5" />
+    <path d="${body}" fill="url(#fresnel)" opacity=".42" />
     <ellipse cx="${centerX}" cy="82" rx="28" ry="51" fill="#ff6c2c" opacity=".06" filter="url(#tube-aura)">
       <animate attributeName="opacity" values=".04;.18;.06;.12;.04" dur="3.8s" begin="${delay}" repeatCount="indefinite" />
     </ellipse>
@@ -100,10 +102,14 @@ function renderTube(index, digitWidth) {
       <animate attributeName="opacity" values=".22;.55;.28;.46;.22" dur="3.1s" begin="${delay}" repeatCount="indefinite" />
     </rect>
     <path d="${ghostDigit}" transform="translate(${tubeX + 5} 14) scale(1 1.17)" fill="none" stroke="#8d3d24" stroke-opacity=".2" stroke-width="1.25" />
+    <ellipse cx="${centerX}" cy="83" rx="24" ry="45" fill="none" stroke="#c47a43" stroke-opacity=".2" stroke-width="1" />
+    <path d="M${tubeX + 27} 35 C${tubeX + 18} 61 ${tubeX + 22} 104 ${tubeX + 32} 127 M${tubeX + 53} 35 C${tubeX + 63} 62 ${tubeX + 59} 104 ${tubeX + 49} 127" fill="none" stroke="#d9874b" stroke-opacity=".22" stroke-width="1.2" />
     <path d="M${tubeX + 20} 28 C${tubeX + 34} 36 ${tubeX + 46} 36 ${tubeX + 61} 28" fill="none" stroke="#ffd58c" stroke-opacity=".28" stroke-width="1" stroke-dasharray="2 7">
       <animate attributeName="stroke-dashoffset" values="0;-18;0" dur="2.6s" begin="${delay}" repeatCount="indefinite" />
     </path>
     <path d="M${tubeX + 22} 35 V129 M${tubeX + 58} 35 V129" stroke="#f2a45a" stroke-opacity=".28" stroke-width="1.1" />
+    <circle cx="${tubeX + 22}" cy="38" r="2" fill="#d98b50" fill-opacity=".45" />
+    <circle cx="${tubeX + 58}" cy="38" r="2" fill="#d98b50" fill-opacity=".45" />
     <path d="M${tubeX + 21} 40 H${tubeX + 59} M${tubeX + 20} 123 H${tubeX + 60}" stroke="#ffbd69" stroke-opacity=".28" stroke-width="1" />
     <ellipse cx="${centerX}" cy="12" rx="10" ry="4" fill="url(#metal)" stroke="#ffd28a" stroke-opacity=".5" />
     <path d="M${centerX - 6} 10 V6 C${centerX - 6} 1 ${centerX + 6} 1 ${centerX + 6} 6 V10" fill="url(#glass-top)" stroke="#ffb668" stroke-opacity=".66" stroke-width="1" />
@@ -111,7 +117,7 @@ function renderTube(index, digitWidth) {
       <animate attributeName="stroke-opacity" values=".14;.6;.2" dur="4.6s" begin="${delay}" repeatCount="indefinite" />
     </path>
     <path d="M${tubeX + 66} 29 C${tubeX + 72} 51 ${tubeX + 70} 98 ${tubeX + 63} 122" fill="none" stroke="#ffb65a" stroke-opacity=".12" stroke-width="1.4" />
-    <rect x="${tubeX + 4}" y="128" width="${tubeWidth - 8}" height="31" rx="7" fill="url(#metal)" stroke="#a9522d" stroke-width="1.3" />
+    <path d="M${tubeX + 4} 129 H${tubeX + tubeWidth - 4} V151 C${tubeX + tubeWidth - 4} 156 ${tubeX + tubeWidth - 10} 159 ${tubeX + tubeWidth - 16} 159 H${tubeX + 16} C${tubeX + 10} 159 ${tubeX + 4} 156 ${tubeX + 4} 151 Z" fill="url(#metal)" stroke="#a9522d" stroke-width="1.3" />
     <rect x="${tubeX + 7}" y="133" width="${tubeWidth - 14}" height="7" rx="3" fill="#2c100a" opacity=".72" />
     <path d="M${tubeX + 12} 145 H${tubeX + tubeWidth - 12}" stroke="#f2ad65" stroke-opacity=".55" />
     <rect x="${tubeX + 13}" y="145" width="${tubeWidth - 26}" height="2" rx="1" fill="#ff8a3c" opacity=".26">
@@ -167,16 +173,28 @@ function renderCounter(count) {
     ${clips}
     ${renderNixieSymbols()}
     <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#1a0d0c" />
-      <stop offset="0.52" stop-color="#070404" />
-      <stop offset="1" stop-color="#28100b" />
+      <stop offset="0" stop-color="#11100e" />
+      <stop offset="0.48" stop-color="#090909" />
+      <stop offset="1" stop-color="#15120f" />
     </linearGradient>
+    <radialGradient id="vignette" cx="50%" cy="46%" r="74%">
+      <stop offset="0" stop-color="#3a2417" stop-opacity=".18" />
+      <stop offset=".46" stop-color="#17120f" stop-opacity=".08" />
+      <stop offset="1" stop-color="#020202" stop-opacity=".64" />
+    </radialGradient>
     <linearGradient id="tube-glass" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#ffbf73" stop-opacity=".2" />
-      <stop offset="0.18" stop-color="#8e391f" stop-opacity=".24" />
-      <stop offset="0.53" stop-color="#100607" stop-opacity=".94" />
-      <stop offset="0.82" stop-color="#5f1d12" stop-opacity=".42" />
-      <stop offset="1" stop-color="#ffae58" stop-opacity=".18" />
+      <stop offset="0" stop-color="#f8dbac" stop-opacity=".16" />
+      <stop offset="0.15" stop-color="#9c5c36" stop-opacity=".2" />
+      <stop offset="0.5" stop-color="#0f0c0a" stop-opacity=".94" />
+      <stop offset="0.78" stop-color="#4c2a1a" stop-opacity=".38" />
+      <stop offset="1" stop-color="#d99a5e" stop-opacity=".15" />
+    </linearGradient>
+    <linearGradient id="fresnel" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fff4d0" stop-opacity=".28" />
+      <stop offset=".08" stop-color="#fff6dc" stop-opacity=".06" />
+      <stop offset=".5" stop-color="#fff1cb" stop-opacity="0" />
+      <stop offset=".9" stop-color="#fff1cb" stop-opacity=".03" />
+      <stop offset="1" stop-color="#ffd494" stop-opacity=".23" />
     </linearGradient>
     <linearGradient id="glass-rim" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#ffd58d" stop-opacity=".86" />
@@ -203,6 +221,13 @@ function renderCounter(count) {
     <pattern id="scanlines" width="4" height="4" patternUnits="userSpaceOnUse">
       <path d="M0 0 H4" stroke="#ff9b38" stroke-opacity=".11" stroke-width="1" />
     </pattern>
+    <filter id="grain" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency=".72" numOctaves="2" seed="19" result="noise" />
+      <feColorMatrix in="noise" type="saturate" values="0" result="mono" />
+      <feComponentTransfer in="mono">
+        <feFuncA type="table" tableValues="0 .16" />
+      </feComponentTransfer>
+    </filter>
     <linearGradient id="sweep" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#ff9f4b" stop-opacity="0" />
       <stop offset=".48" stop-color="#ffd38a" stop-opacity=".72" />
@@ -219,19 +244,27 @@ function renderCounter(count) {
       <feColorMatrix in="blur" type="matrix" values="1 0 0 0 .9 0 0 0 0 .25 0 0 0 0 .02 0 0 0 .98 0" result="orange" />
       <feMerge><feMergeNode in="orange" /><feMergeNode in="SourceGraphic" /></feMerge>
     </filter>
+    <filter id="digit-bloom" x="-120%" y="-100%" width="340%" height="300%">
+      <feGaussianBlur stdDeviation="7.5" result="blur" />
+      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 .86 0 0 0 0 .16 0 0 0 0 0 0 0 0 .62 0" />
+    </filter>
     <filter id="ember-glow" x="-60%" y="-60%" width="220%" height="220%">
       <feGaussianBlur stdDeviation="2.2" result="blur" />
       <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
     </filter>
     <style>
-      .nixie-halo { fill: none; stroke: #ff7c31; stroke-width: 7.5; stroke-linecap: round; stroke-linejoin: round; opacity: .34; filter: url(#digit-glow); }
-      .nixie-wire { fill: none; stroke: #ffc26d; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; filter: url(#digit-glow); }
+      .nixie-halo { fill: none; stroke: #ff5a00; stroke-width: 10; stroke-linecap: round; stroke-linejoin: round; opacity: .24; filter: url(#digit-bloom); }
+      .nixie-wire { fill: none; stroke: #ff8a24; stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round; filter: url(#digit-glow); }
+      .nixie-core { fill: none; stroke: #ffd08a; stroke-width: 1.05; stroke-linecap: round; stroke-linejoin: round; opacity: .92; }
     </style>
   </defs>
-  <rect x="1.5" y="1.5" width="${width - 3}" height="${height - 3}" rx="15" fill="#040303" stroke="#4d170f" stroke-width="3" />
-  <rect x="5" y="5" width="${width - 10}" height="${height - 10}" rx="12" fill="url(#panel)" stroke="#bf5c2b" stroke-opacity=".78" stroke-width="1.3" />
+  <rect x="1.5" y="1.5" width="${width - 3}" height="${height - 3}" rx="8" fill="#060606" stroke="#544131" stroke-width="2.5" />
+  <rect x="5" y="5" width="${width - 10}" height="${height - 10}" rx="6" fill="url(#panel)" stroke="#a36b3d" stroke-opacity=".72" stroke-width="1.1" />
   <path d="M11 26 H${width - 11} M11 183 H${width - 11}" stroke="#c35727" stroke-opacity=".45" />
-  <rect x="7" y="7" width="${width - 14}" height="${height - 14}" rx="10" fill="url(#scanlines)" />
+  <rect x="7" y="7" width="${width - 14}" height="${height - 14}" rx="4" fill="url(#panel)" />
+  <rect x="7" y="7" width="${width - 14}" height="${height - 14}" rx="4" fill="url(#scanlines)" opacity=".68" />
+  <rect x="7" y="7" width="${width - 14}" height="${height - 14}" rx="4" fill="#c6a47e" opacity=".035" filter="url(#grain)" />
+  <rect x="7" y="7" width="${width - 14}" height="${height - 14}" rx="4" fill="url(#vignette)" />
   <path d="M-26 8 V182" stroke="url(#sweep)" stroke-width="7" opacity=".24" filter="url(#tube-aura)">
     <animateTransform attributeName="transform" type="translate" values="0 0;${width + 52} 0;0 0" dur="8.5s" repeatCount="indefinite" />
   </path>
