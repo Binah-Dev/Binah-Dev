@@ -42,8 +42,12 @@ function renderNixieSymbols() {
     <symbol id="cathode-${digit}" viewBox="0 0 70 92">
       <path d="${pathData}" class="cathode-atmosphere" />
       <path d="${pathData}" class="cathode-bloom" />
-      <path d="${pathData}" class="cathode-wire" />
-      <path d="${pathData}" class="cathode-core" />
+      <path d="${pathData}" class="filament-shadow" transform="translate(.8 1.05)" />
+      <path d="${pathData}" class="filament-body" />
+      <path d="${pathData}" class="ion-sheath" />
+      <path d="${pathData}" class="filament-hot-edge" />
+      <path d="${pathData}" class="filament-spine" />
+      <path d="${pathData}" class="filament-glint" />
     </symbol>`).join('');
 }
 
@@ -215,10 +219,14 @@ function renderCounter(count) {
       <feMerge><feMergeNode in="core-light" /><feMergeNode in="SourceGraphic" /></feMerge>
     </filter>
     <style>
-      .cathode-atmosphere { fill: none; stroke: #ff3000; stroke-width: 18; stroke-linecap: round; stroke-linejoin: round; opacity: .48; filter: url(#cathode-wide-glow); }
-      .cathode-bloom { fill: none; stroke: #ff5a00; stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; opacity: .94; filter: url(#cathode-near-glow); }
-      .cathode-wire { fill: none; stroke: #ff8b00; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; filter: url(#cathode-wire-light); }
-      .cathode-core { fill: none; stroke: #fff6c2; stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round; opacity: 1; filter: url(#cathode-core-light); }
+      .cathode-atmosphere { fill: none; stroke: #ff3000; stroke-width: 17; stroke-linecap: round; stroke-linejoin: round; opacity: .43; filter: url(#cathode-wide-glow); }
+      .cathode-bloom { fill: none; stroke: #ff5700; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; opacity: .86; filter: url(#cathode-near-glow); }
+      .filament-shadow { fill: none; stroke: #080301; stroke-width: 5.4; stroke-linecap: round; stroke-linejoin: round; opacity: .9; }
+      .filament-body { fill: none; stroke: #6f2b0d; stroke-width: 4.7; stroke-linecap: round; stroke-linejoin: round; opacity: .98; }
+      .ion-sheath { fill: none; stroke: #ff7600; stroke-width: 3.65; stroke-linecap: round; stroke-linejoin: round; filter: url(#cathode-wire-light); }
+      .filament-hot-edge { fill: none; stroke: #ffd064; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; filter: url(#cathode-core-light); }
+      .filament-spine { fill: none; stroke: #7a2d0b; stroke-width: .48; stroke-linecap: round; stroke-linejoin: round; opacity: .68; }
+      .filament-glint { fill: none; stroke: #fff2b7; stroke-width: .3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: .8 2.2; opacity: .9; }
       .socket-mark { fill: #dc8b51; fill-opacity: .7; font: 600 5px Georgia, serif; letter-spacing: 1.2px; }
       .brand { fill: #efb77e; fill-opacity: .96; font: 600 10px Georgia, 'Times New Roman', serif; letter-spacing: 2.2px; }
       .instrument { fill: #c87949; fill-opacity: .62; font: 500 6.5px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: 1.45px; }
