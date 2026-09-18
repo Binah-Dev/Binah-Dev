@@ -1,4 +1,4 @@
-<img width="611" height="149" alt="image" src="https://github.com/user-attachments/assets/c8630b08-d075-42cb-937c-aa77d5ddec8e" /><p align="center">
+<p align="center">
   <img src="https://raw.githubusercontent.com/Binah-Dev/Binah-Dev/main/assets/header.svg" width="100%" alt="Binah — wandering through algorithms, ideas, and infinite worlds" />
 </p>
 
