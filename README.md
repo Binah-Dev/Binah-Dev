@@ -56,5 +56,5 @@ I enjoy turning complicated things into clear, useful experiences — one small 
 </p>
 
 <p align="center">
-  <img src="https://binah-profile-counter.vercel.app/api/counter?v=steins-gate-glass-tube-v6" alt="Animated profile views" />
+  <img src="https://binah-profile-counter.vercel.app/api/counter?v=steins-gate-museum-instrument-v7" width="100%" alt="Animated Nixie tube profile views counter" />
 </p>
