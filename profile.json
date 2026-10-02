@@ -1,0 +1,32 @@
+{
+  "handle": "binah-dev",
+  "hero": {
+    "name": "Binah",
+    "tagline": ["Embarking on an endless journey", "through infinite worlds."],
+    "tags": ["algorithms", "full-stack", "local-first"]
+  },
+  "stack_caption": "client → server → tooling",
+  "stack": [
+    {
+      "layer": "languages",
+      "items": [
+        { "name": "C++", "icon": "cplusplus" },
+        { "name": "TypeScript", "icon": "typescript" },
+        { "name": "Python", "icon": "python" }
+      ]
+    },
+    {
+      "layer": "frontend",
+      "items": [
+        { "name": "React", "icon": "react" },
+        { "name": "Electron", "icon": "electron" }
+      ]
+    },
+    {
+      "layer": "tooling",
+      "items": [
+        { "name": "Git", "icon": "git" }
+      ]
+    }
+  ]
+}
