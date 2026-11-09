@@ -5,7 +5,7 @@
     "tagline": ["Embarking on an endless journey", "through infinite worlds."],
     "tags": ["algorithms", "full-stack", "local-first"]
   },
-  "stack_caption": "client → server → tooling",
+  "stack_caption": "client → server → embedded → tooling",
   "stack": [
     {
       "layer": "languages",
@@ -23,9 +23,17 @@
       ]
     },
     {
+      "layer": "embedded",
+      "items": [
+        { "name": "FPGA", "icon": "fpga" },
+        { "name": "STM32", "icon": "stm32" }
+      ]
+    },
+    {
       "layer": "tooling",
       "items": [
-        { "name": "Git", "icon": "git" }
+        { "name": "Git", "icon": "git" },
+        { "name": "CLI", "icon": "cli" }
       ]
     }
   ]
