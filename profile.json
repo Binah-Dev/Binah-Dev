@@ -11,6 +11,7 @@
       "layer": "languages",
       "items": [
         { "name": "C++", "icon": "cplusplus" },
+        { "name": "JavaScript", "icon": "javascript" },
         { "name": "TypeScript", "icon": "typescript" },
         { "name": "Python", "icon": "python" }
       ]
